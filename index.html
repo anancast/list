@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Топ-50 лучших сериалов</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --container-bg: #1e1e1e;
+            --text-main: #f5c518;
+            --text-secondary: #ffffff;
+            --text-muted: #aaaaaa;
+            --hover-bg: #2a2a2a;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-secondary);
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+        }
+
+        header {
+            background-color: #000000;
+            padding: 20px 0;
+            text-align: center;
+            border-bottom: 3px solid var(--text-main);
+        }
+
+        header h1 { margin: 0; color: var(--text-main); font-size: 2.5rem; }
+        header p { margin: 5px 0 0 0; color: var(--text-muted); font-size: 1.1rem; }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .series-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .series-item {
+            background-color: var(--container-bg);
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            display: flex;
+            align-items: flex-start;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            gap: 20px;
+        }
+
+        .series-item:hover {
+            transform: translateY(-3px);
+            background-color: var(--hover-bg);
+        }
+
+        .series-rank {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--text-main);
+            min-width: 40px;
+            text-align: center;
+            margin-top: -5px;
+        }
+
+        .series-poster {
+            width: 120px;
+            height: 175px;
+            border-radius: 4px;
+            object-fit: cover;
+            background-color: #333;
+            flex-shrink: 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .series-info {
+            flex-grow: 1;
+        }
+
+        .series-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .series-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 0 0 5px 0;
+        }
+
+        .series-meta {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .series-desc {
+            font-size: 0.95rem;
+            color: #dddddd;
+            margin: 0;
+            text-align: justify;
+        }
+
+        .imdb-rating {
+            background-color: var(--text-main);
+            color: #000;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-shrink: 0;
+        }
+
+        .imdb-rating::before {
+            content: '★';
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 600px) {
+            .series-item { flex-wrap: wrap; gap: 15px; }
+            .series-header { flex-direction: column; gap: 10px; }
+            .imdb-rating { align-self: flex-start; }
+            .series-poster { width: 100px; height: 147px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>IMDb Top 50</h1>
+        <p>Список сериалов с официальными постерами и описанием</p>
+    </header>
+
+    <div class="container">
+        <ul class="series-list" id="series-container">
+            <!-- Элементы будут сгенерированы скриптом для компактности кода -->
+        </ul>
+    </div>
+
+    <script>
+        // База данных 50 лучших сериалов
+        const seriesData = [
+            { title: "Breaking Bad", ruTitle: "Во все тяжкие", meta: "2008–2013 | Драма, Криминал", rating: "9.5", search: "Breaking Bad", desc: "Школьный учитель химии узнает, что болен неоперабельным раком легких. Чтобы обеспечить финансовое будущее своей семьи, он решает использовать свои навыки для создания лучшего метамфетамина в городе." },
+            { title: "Planet Earth II", ruTitle: "Планета Земля 2", meta: "2016 | Документальный", rating: "9.5", search: "Planet Earth II", desc: "Масштабный документальный проект, использующий новейшие технологии съемки. Он погружает зрителя в невероятную жизнь дикой природы в самых разных уголках нашей планеты — от джунглей до современных городов." },
+            { title: "Planet Earth", ruTitle: "Планета Земля", meta: "2006 | Документальный", rating: "9.4", search: "Planet Earth", desc: "Эпическое путешествие по Земле, показывающее разнообразие ее ландшафтов и обитателей. Каждая серия исследует отдельный биом, демонстрируя борьбу за выживание в суровых условиях." },
+            { title: "Band of Brothers", ruTitle: "Братья по оружию", meta: "2001 | Драма, Военный", rating: "9.4", search: "Band of Brothers", desc: "История роты «E» 506-го парашютно-десантного полка США во время Второй мировой войны. Сериал прослеживает их путь от тренировочного лагеря до высадки в Нормандии и конца войны." },
+            { title: "Chernobyl", ruTitle: "Чернобыль", meta: "2019 | Драма, Триллер", rating: "9.3", search: "Chernobyl", desc: "Художественная реконструкция аварии на Чернобыльской АЭС в 1986 году. Сериал исследует причины катастрофы, самоотверженность ликвидаторов и попытки системы скрыть правду." },
+            { title: "The Wire", ruTitle: "Прослушка", meta: "2002–2008 | Драма, Криминал", rating: "9.3", search: "The Wire", desc: "Многогранный взгляд на жизнь города Балтимор глазами как полицейских, так и преступников. Каждый сезон раскрывает новую грань жизни города: наркоторговлю, порт, политику, школы и прессу." },
+            { title: "Blue Planet II", ruTitle: "Голубая планета 2", meta: "2017 | Документальный", rating: "9.3", search: "Blue Planet II", desc: "Глубоководное исследование тайн мирового океана. Документальный сериал показывает ранее невиданные виды морских существ и невероятные способы их выживания." },
+            { title: "Avatar: The Last Airbender", ruTitle: "Аватар: Легенда об Аанге", meta: "2005–2008 | Анимация, Экшен", rating: "9.3", search: "Avatar: The Last Airbender", desc: "В мире, разделенном на четыре нации магов стихий, баланс нарушен войной, начатой Народом Огня. Юный Аватар по имени Аанг должен овладеть всеми стихиями, чтобы остановить войну и вернуть мир." },
+            { title: "Cosmos: A Spacetime Odyssey", ruTitle: "Космос: Пространство и время", meta: "2014 | Документальный", rating: "9.3", search: "Cosmos: A Spacetime Odyssey", desc: "Научно-популярный сериал, ведущим которого выступает астрофизик Нил Деграсс Тайсон. Проект доступно и увлекательно рассказывает о законах Вселенной, происхождении жизни и месте человека в космосе." },
+            { title: "The Sopranos", ruTitle: "Клан Сопрано", meta: "1999–2007 | Драма, Криминал", rating: "9.2", search: "The Sopranos", desc: "Глава мафиозной семьи Тони Сопрано пытается найти баланс между своей криминальной империей и проблемами в личной жизни. Внутренние конфликты вынуждают его тайно обратиться к психотерапевту." },
+            
+            // Сокращено для экономии места, логика повторяется для оставшихся 40
+            { title: "Cosmos", ruTitle: "Космос (1980)", meta: "1980 | Документальный", rating: "9.2", search: "Cosmos", desc: "Оригинальный шедевр Карла Сагана, открывший миллионам людей красоту науки. Исследуются основы астрономии, биологии и истории." },
+            { title: "Our Planet", ruTitle: "Наша планета", meta: "2019 | Документальный", rating: "9.2", search: "Our Planet", desc: "Красочный сериал о природе, делающий акцент на влиянии изменения климата. Потрясающие кадры флоры и фауны сопровождаются важным экологическим посылом." },
+            { title: "Game of Thrones", ruTitle: "Игра престолов", meta: "2011–2019 | Фэнтези, Драма", rating: "9.2", search: "Game of Thrones", desc: "В вымышленном мире Вестероса несколько могущественных семей ведут жестокую борьбу за Железный трон. Тем временем на севере пробуждается древнее и опасное зло." },
+            { title: "Rick and Morty", ruTitle: "Рик и Морти", meta: "2013–н.в. | Анимация, Комедия", rating: "9.1", search: "Rick and Morty", desc: "Гениальный, но циничный ученый-алкоголик Рик берет своего неуверенного в себе внука Морти в опасные приключения по мультивселенным. Сериал полон черного юмора и философских концепций." },
+            { title: "The World at War", ruTitle: "Мир в войне", meta: "1973 | Документальный", rating: "9.1", search: "The World at War", desc: "Монументальный исторический цикл, детально описывающий события Второй мировой войны. Включает уникальные архивные кадры и интервью с участниками событий." },
+            { title: "Fullmetal Alchemist: Brotherhood", ruTitle: "Стальной алхимик: Братство", meta: "2009–2010 | Анимация, Экшен", rating: "9.1", search: "Fullmetal Alchemist: Brotherhood", desc: "Двое братьев используют запретную алхимию, чтобы воскресить мать, но платят за это страшную цену. Они отправляются на поиски Философского камня, чтобы вернуть свои тела." },
+            { title: "The Last Dance", ruTitle: "Последний танец", meta: "2020 | Документальный", rating: "9.1", search: "The Last Dance", desc: "Хроника карьеры легендарного Майкла Джордана и команды «Чикаго Буллз» в 1990-х. Особое внимание уделено их финальному победному сезону." },
+            { title: "Life", ruTitle: "Жизнь", meta: "2009 | Документальный", rating: "9.1", search: "Life", desc: "Сериал исследует самые необычные и удивительные стратегии выживания, которые используют животные и растения. Потрясающая макросъемка и истории адаптации." },
+            { title: "The Twilight Zone", ruTitle: "Сумеречная зона", meta: "1959–1964 | Фантастика", rating: "9.0", search: "The Twilight Zone", desc: "Антология мистических и научно-фантастических историй с неожиданными финалами. Каждая серия исследует человеческие пороки, страхи и социальные проблемы." },
+            { title: "Sherlock", ruTitle: "Шерлок", meta: "2010–2017 | Детектив", rating: "9.0", search: "Sherlock", desc: "Современная адаптация классических произведений Артура Конан Дойла. Эксцентричный социопат Шерлок Холмс и ветеран войны Джон Ватсон расследуют запутанные преступления в Лондоне 21 века." },
+
+            { title: "The Vietnam War", ruTitle: "Вьетнамская война", meta: "2017 | Документальный", rating: "9.0", search: "The Vietnam War", desc: "Глубокое исследование одного из самых противоречивых конфликтов 20-го века. Рассказ ведется через свидетельства солдат и мирных жителей с обеих сторон." },
+            { title: "Batman: The Animated Series", ruTitle: "Бэтмен", meta: "1992–1995 | Анимация", rating: "9.0", search: "Batman: The Animated Series", desc: "Мрачная и стильная анимационная интерпретация приключений Темного рыцаря. Сериал славится глубоким раскрытием злодеев и атмосферой нуара." },
+            { title: "Scam 1992", ruTitle: "Скам 1992", meta: "2020 | Биография", rating: "9.0", search: "Scam 1992: The Harshad Mehta Story", desc: "История взлета и падения индийского биржевого брокера Харшада Мехты. Он организовал одну из крупнейших финансовых пирамид на бомбейской фондовой бирже." },
+            { title: "Arcane", ruTitle: "Аркейн", meta: "2021–н.в. | Анимация", rating: "9.0", search: "Arcane", desc: "В утопическом городе Пилтовер и угнетенном Зауне разгорается конфликт. Две сестры оказываются по разные стороны баррикад в войне технологий и магии." },
+            { title: "The Blue Planet", ruTitle: "Голубая планета", meta: "2001 | Документальный", rating: "8.9", search: "The Blue Planet", desc: "Первое масштабное погружение BBC в тайны океанов. Проект открыл зрителям удивительную жизнь китов, дельфинов и глубоководных монстров." },
+            { title: "Attack on Titan", ruTitle: "Атака титанов", meta: "2013–2023 | Анимация", rating: "8.9", search: "Attack on Titan", desc: "Остатки человечества прячутся за огромными стенами от кровожадных гигантов. Юный Эрен клянется уничтожить титанов, но правда об их мире оказывается гораздо страшнее." },
+            { title: "The Office", ruTitle: "Офис (US)", meta: "2005–2013 | Комедия", rating: "8.9", search: "The Office", desc: "Псевдодокументальный ситком о повседневной жизни сотрудников бумажной компании Dunder Mifflin. Их эксцентричный босс Майкл Скотт постоянно создает неловкие и смешные ситуации." },
+            { title: "Firefly", ruTitle: "Светлячок", meta: "2002–2003 | Фантастика", rating: "8.9", search: "Firefly", desc: "Команда контрабандистов путешествует на корабле «Серенити» по окраинам звездной системы. Им приходится скрываться от властей и выживать в суровых условиях космического Дикого Запада." },
+            { title: "Human Planet", ruTitle: "Планета людей", meta: "2011 | Документальный", rating: "8.9", search: "Human Planet", desc: "Проект посвящен удивительной способности людей выживать в самых экстремальных условиях Земли. Каждая серия рассказывает о связи человека с природой." },
+            { title: "Frozen Planet", ruTitle: "Замерзшая планета", meta: "2011 | Документальный", rating: "8.9", search: "Frozen Planet", desc: "Исследование жизни в Арктике и Антарктике. Сериал показывает красоту ледяных миров и животных, приспособившихся к невыносимому холоду." },
+            
+            { title: "Death Note", ruTitle: "Тетрадь смерти", meta: "2006–2007 | Анимация", rating: "8.9", search: "Death Note", desc: "Школьник-гений находит мистическую тетрадь: человек, чье имя в нее вписано, умирает. Он решает очистить мир от преступников, но по его следу пускают лучшего детектива в мире." },
+            { title: "Only Fools and Horses", ruTitle: "Дуракам везет", meta: "1981–2003 | Комедия", rating: "8.9", search: "Only Fools and Horses", desc: "Культовый британский ситком о двух братьях, пытающихся разбогатеть в Лондоне. Их сомнительные схемы быстрого заработка всегда приводят к комичным провалам." },
+            { title: "The Civil War", ruTitle: "Гражданская война", meta: "1990 | Документальный", rating: "8.9", search: "The Civil War", desc: "Подробный исторический срез гражданской войны в США. Сериал использует тысячи архивных фотографий, писем и дневников того времени." },
+            { title: "True Detective", ruTitle: "Настоящий детектив", meta: "2014–н.в. | Детектив", rating: "8.9", search: "True Detective", desc: "Мрачная антология, где каждый сезон рассказывает новую детективную историю. Следователи сталкиваются не только с изощренными убийцами, но и с собственными демонами." },
+            { title: "Hunter x Hunter", ruTitle: "Охотник х Охотник", meta: "2011–2014 | Анимация", rating: "8.9", search: "Hunter x Hunter", desc: "Мальчик Гон мечтает стать Охотником — элитным искателем приключений, чтобы найти своего пропавшего отца. На этом пути он заводит верных друзей и сталкивается с опасными врагами." },
+            { title: "The Beatles: Get Back", ruTitle: "The Beatles: Get Back", meta: "2021 | Документальный", rating: "8.9", search: "The Beatles: Get Back", desc: "Уникальные, восстановленные кадры работы легендарной группы над их последним альбомом Let It Be. Сериал показывает процесс создания великой музыки и внутренние конфликты в коллективе." },
+            { title: "Fargo", ruTitle: "Фарго", meta: "2014–н.в. | Криминал", rating: "8.9", search: "Fargo", desc: "Антология, вдохновленная одноименным фильмом братьев Коэн. Обычные люди из заснеженных американских городков оказываются втянуты в абсурдные и жестокие криминальные истории." },
+            { title: "Persona", ruTitle: "Персона", meta: "2018 | Документальный", rating: "8.9", search: "Persona", desc: "Глубокое исследование психологии и личности в современном обществе. Проект анализирует, как мы формируем свой публичный имидж и скрываем истинное «я»." },
+            { title: "Dekalog", ruTitle: "Декалог", meta: "1989 | Драма", rating: "8.9", search: "Dekalog", desc: "Цикл из 10 телефильмов Кшиштофа Кесьлёвского, каждый из которых по-своему интерпретирует одну из Десяти заповедей. Действие происходит в современном жилом комплексе в Варшаве." },
+            { title: "Seinfeld", ruTitle: "Сайнфелд", meta: "1989–1998 | Комедия", rating: "8.9", search: "Seinfeld", desc: "Знаменитый ситком «ни о чем», рассказывающий о жизни стендап-комика Джерри Сайнфелда и его эксцентричных друзей в Нью-Йорке. Они постоянно попадают в нелепые бытовые ситуации." },
+            
+            { title: "Cowboy Bebop", ruTitle: "Ковбой Бибоп", meta: "1998–1999 | Анимация", rating: "8.9", search: "Cowboy Bebop", desc: "В будущем команда охотников за головами путешествует по солнечной системе на корабле «Бибоп». Они пытаются свести концы с концами, одновременно убегая от призраков своего прошлого." },
+            { title: "Better Call Saul", ruTitle: "Лучше звоните Солу", meta: "2015–2022 | Драма", rating: "8.9", search: "Better Call Saul", desc: "Приквел «Во все тяжкие», рассказывающий историю мелкого адвоката Джимми МакГилла. Сериал показывает его постепенную трансформацию в изворотливого криминального юриста Сола Гудмана." },
+            { title: "Nathan for You", ruTitle: "Нейтан спешит на выручку", meta: "2013–2017 | Комедия", rating: "8.8", search: "Nathan for You", desc: "Комик с бизнес-образованием Нейтан Филдер предлагает реальным мелким предпринимателям абсурдные стратегии для спасения их бизнеса. Результаты всегда получаются непредсказуемыми и очень смешными." },
+            { title: "Gravity Falls", ruTitle: "Грэвити Фоллс", meta: "2012–2016 | Анимация", rating: "8.8", search: "Gravity Falls", desc: "Близнецы Диппер и Мэйбл приезжают на летние каникулы к своему прадяде в загадочный городок. Вскоре они обнаруживают, что лес полон аномалий, монстров и древних тайн." },
+            { title: "Twin Peaks", ruTitle: "Твин Пикс", meta: "1990–1991 | Мистика", rating: "8.8", search: "Twin Peaks", desc: "Спецагент ФБР Дейл Купер приезжает в тихий городок Твин Пикс расследовать убийство школьницы Лоры Палмер. Расследование вскрывает темные и сюрреалистичные тайны местных жителей." },
+            { title: "Black Mirror", ruTitle: "Черное зеркало", meta: "2011–н.в. | Триллер", rating: "8.8", search: "Black Mirror", desc: "Научно-фантастическая антология, исследующая влияние современных технологий на общество. Каждая серия — это самостоятельная, часто мрачная история о технологическом прогрессе и человеческих слабостях." },
+            { title: "The Boys", ruTitle: "Пацаны", meta: "2019–н.в. | Экшен", rating: "8.7", search: "The Boys", desc: "В мире, где супергерои принадлежат могущественной корпорации и злоупотребляют властью, группа обычных людей решает бросить им вызов. Они намерены раскрыть миру грязную правду о «героях»." },
+            { title: "Peaky Blinders", ruTitle: "Острые козырьки", meta: "2013–2022 | Криминал", rating: "8.7", search: "Peaky Blinders", desc: "История криминального клана Шелби в Бирмингеме 1920-х годов. Жестокий и амбициозный лидер Томми Шелби стремится легализовать свой бизнес и расширить влияние семьи." },
+            { title: "Succession", ruTitle: "Наследники", meta: "2018–2023 | Драма", rating: "8.7", search: "Succession", desc: "Стареющий патриарх глобальной медиаимперии задумывается об уходе на покой. Четверо его взрослых детей вступают в токсичную и жестокую борьбу за власть над компанией." },
+            { title: "Narcos", ruTitle: "Нарко", meta: "2015–2017 | Криминал", rating: "8.7", search: "Narcos", desc: "Основанная на реальных событиях история становления и падения Медельинского картеля. В центре сюжета — противостояние колумбийского наркобарона Пабло Эскобара и агентов УБН." }
+        ];
+
+        const container = document.getElementById('series-container');
+
+        // Отрисовка списка
+        seriesData.forEach((series, index) => {
+            const li = document.createElement('li');
+            li.className = 'series-item';
+            li.innerHTML = `
+                <div class="series-rank">${index + 1}</div>
+                <!-- Заглушка, которая будет заменена на официальный постер через API -->
+                <img src="https://placehold.co/120x175/333/666?text=Loading..." alt="${series.title}" class="series-poster" id="poster-${index}">
+                <div class="series-info">
+                    <div class="series-header">
+                        <div>
+                            <h2 class="series-title">${series.title} (${series.ruTitle})</h2>
+                            <div class="series-meta">${series.meta}</div>
+                        </div>
+                        <div class="imdb-rating">${series.rating}</div>
+                    </div>
+                    <p class="series-desc">${series.desc}</p>
+                </div>
+            `;
+            container.appendChild(li);
+
+            // Асинхронный запрос к открытой базе TVMaze для получения официальных постеров
+            fetch(`https://api.tvmaze.com/singlesearch/shows?q=${encodeURIComponent(series.search)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.image && data.image.medium) {
+                        document.getElementById(`poster-${index}`).src = data.image.medium;
+                    } else {
+                        // Если в базе нет постера, ставим красивую заглушку с названием
+                        document.getElementById(`poster-${index}`).src = `https://placehold.co/120x175/2a2a2a/f5c518?text=${encodeURIComponent(series.title.charAt(0))}`;
+                    }
+                })
+                .catch(() => {
+                    // Фолбек при ошибке сети
+                    document.getElementById(`poster-${index}`).src = `https://placehold.co/120x175/2a2a2a/f5c518?text=${index+1}`;
+                });
+        });
+    </script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Список сериалов</title>
+    <title>ТОП сериалов АНФфирмация</title>
     <style>
         :root {
             /* Темная тема */
@@ -31,6 +31,33 @@
         .container {
             max-width: 900px;
             margin: 0 auto;
+        }
+
+        /* Шапка сайта */
+        .site-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .site-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--border-color);
+        }
+
+        .main-title {
+            margin: 0;
+            font-size: 28px;
+            color: #ffffff;
+            text-transform: uppercase;
         }
 
         /* Навигация (Хлебные крошки / Якоря) */
@@ -194,7 +221,40 @@
             font-size: 15px;
         }
 
+        /* Кнопка наверх */
+        #scrollTopBtn {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 99;
+            font-size: 24px;
+            border: none;
+            outline: none;
+            background-color: var(--card-bg);
+            color: var(--link-color);
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            transition: background-color 0.3s, transform 0.2s;
+            line-height: 0;
+        }
+
+        #scrollTopBtn:hover {
+            background-color: var(--border-color);
+            transform: scale(1.1);
+        }
+
         @media (max-width: 600px) {
+            .site-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .main-title {
+                font-size: 22px;
+            }
             .series-card {
                 flex-direction: column;
             }
@@ -217,12 +277,21 @@
     </div>
 
     <div class="container" id="content">
+        <!-- Шапка с логотипом и заголовком -->
+        <header class="site-header">
+            <img src="обложка ютуб новая.jpg" alt="Логотип АНФфирмация" class="site-logo">
+            <h1 class="main-title">ТОП сериалов АНФфирмация</h1>
+        </header>
+
         <!-- Контейнер для динамических ссылок на категории -->
         <nav class="breadcrumbs" id="breadcrumbs"></nav>
         
         <!-- Контейнер для списков -->
         <div id="categories-container"></div>
     </div>
+
+    <!-- Кнопка прокрутки наверх -->
+    <button id="scrollTopBtn" title="Наверх">&#8679;</button>
 
     <script>
         const DATA_URL = 'https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnTS_fwNg5dvoOJBvu3JLsP1ecSInOpbVye416hJB8qd4X2JSQ0QFGJWfVKVK_9fjqD54lw6Phcjon7gg4rQG8WiQkloqik_dD5Y9kSMdmdV1zalBxWjHSLCAdB3g4M7BA33_T-IQRzUC_0BnGRJGKZ0auw1wAgfnPU7V-sLXofXuqy2Xt5yzKvVTT98fb1S6M0wYRP-KS9QH1_dIqThqTmrjbhZhKbODEzjpV8mHlRXSOkstmf4HvoAJBVoWhD434SWQC-_wjhhsgqC9MiGNqC-Xzy4Yw&lib=MTxAziyImlhTIhNl9hwlnAbMPylP4P88t';
@@ -313,6 +382,25 @@
                 categoriesContainer.appendChild(section);
             });
         }
+
+        // Логика кнопки "Наверх"
+        const scrollTopBtn = document.getElementById("scrollTopBtn");
+
+        window.addEventListener('scroll', () => {
+            // Показываем кнопку, если прокрутили больше 300 пикселей
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                scrollTopBtn.style.display = "block";
+            } else {
+                scrollTopBtn.style.display = "none";
+            }
+        });
+
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth' // Плавная прокрутка
+            });
+        });
     </script>
 </body>
 </html>

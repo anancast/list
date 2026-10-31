@@ -266,6 +266,9 @@
                 font-size: 14px;
                 gap: 6px;
             }
+			.d-none{
+				display:none;
+			}
         }
     </style>
 </head>
@@ -358,17 +361,19 @@
 					card.href = `https://www.imdb.com/title/${item.id}/`;
 					card.target = "_blank";
                     card.className = 'series-card';
-					item.rating = (item.rating % parseInt(item.rating) == 0) ? item.rating + '.0' : item.rating;
+					if(item.rating !== ''){
+						item.rating = (item.rating % parseInt(item.rating) == 0) ? item.rating + '.0' : item.rating;
+					}
                     card.innerHTML = `
                         <div class="poster-container">
                             <img src="${item.poster || ''}" alt="Постер ${item.title}" loading="lazy">
                         </div>
                         <div class="series-info">
                             <div class="series-header">
-                                <h3 class="series-title">${item.title} / ${item.engTitle}</h3>
+                                <h3 class="series-title">${item.title}`+ ((item.engTitle !== '') `/ ${item.engTitle}` : '') +`</h3>
                                 <span class="series-year">(${item.year})</span>
                             </div>
-                            <div class="series-rating">
+                            <div class="series-rating`+ ((item.rating !== '') ? '' : ' d-none') +`">
                                 <span class="imdb-icon">IMDb</span>
                                 <span>${item.rating}</span>
                             </div>

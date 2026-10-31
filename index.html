@@ -267,7 +267,7 @@
                 gap: 6px;
             }
 			.d-none{
-				display:none;
+				display:none !important;
 			}
         }
     </style>
@@ -371,7 +371,7 @@
                         <div class="series-info">
                             <div class="series-header">
                                 <h3 class="series-title">${item.title} ${item.engTitle !== '' ? '/ '+ item.engTitle : ''}</h3>
-                                <span class="series-year">(${item.year})</span>
+                                <span class="series-year${item.year !== '' ? '' : ' d-none'}">(${item.year})</span>
                             </div>
                             <div class="series-rating${item.rating !== '' ? '' : ' d-none'}">
                                 <span class="imdb-icon">IMDb</span>

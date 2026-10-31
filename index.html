@@ -358,7 +358,7 @@
                 // 3. Заполнение секции карточками
                 categoryObj.items.forEach(item => {
                     const card = document.createElement('a');
-					card.href = `https://www.imdb.com/title/${item.id}/`;
+					card.href = `https://www.imdb.com/${(item.id.includes('nm') ? 'name/' : 'title/')+ item.id}/`;
 					card.target = "_blank";
                     card.className = 'series-card';
 					if(item.rating !== ''){
